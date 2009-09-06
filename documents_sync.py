@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 
+# BEEP BEEP THIS module is NOT DONE YET. NOT WORKING.
+# BEEP BEEP THIS module is NOT DONE YET. NOT WORKING.
+# BEEP BEEP THIS module is NOT DONE YET. NOT WORKING.
+# BEEP BEEP THIS module is NOT DONE YET. NOT WORKING.
+
 import os
 import sys
 import optparse
@@ -100,11 +105,9 @@ class SyncedDocumentController(object):
 					data['content'] = open(each_path).read()
 
 		shadows_path = locals_path + ".shadows"
-		for each in os.listdir(locals_path):
-			
-		
-		for each in 	
-		return locals
+		#for each in os.listdir(locals_path):
+		#for each in 	
+		#return locals
 
 	def read_shadows(self):
 		shadows = {}
@@ -122,6 +125,13 @@ class SyncedDocumentController(object):
 				shadows[shadow_id] = SyncedDocument(shadow_data)
 			
 		return shadows
-		
-synced_document_controller = SyncedDocumentController()
-synced_document_controller.sync_documents()
+
+print service_instance.GET_documents()
+print service_instance.GET_document("p4")
+#synced_document_controller = SyncedDocumentController()
+#synced_document_controller.sync_documents()
+
+# BEEP BEEP THIS module is NOT DONE YET. NOT WORKING.
+# BEEP BEEP THIS module is NOT DONE YET. NOT WORKING.
+# BEEP BEEP THIS module is NOT DONE YET. NOT WORKING.
+# BEEP BEEP THIS module is NOT DONE YET. NOT WORKING.
