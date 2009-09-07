@@ -127,7 +127,9 @@ class SyncedDocumentController(object):
 		return shadows
 
 print service_instance.GET_documents()
-print service_instance.GET_document("p4")
+print service_instance.GET_document("p2")
+print service_instance.PUT_document("p2", None, name="kimchi", content="look! monkeys are here.")
+
 #synced_document_controller = SyncedDocumentController()
 #synced_document_controller.sync_documents()
 
