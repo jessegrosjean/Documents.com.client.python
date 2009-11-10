@@ -7,6 +7,7 @@
 
 import os
 import sys
+import sqlite3
 import optparse
 import simplejson
 import documents_service
@@ -25,8 +26,6 @@ class SyncedDocument(object):
 		self.serverVersion = -1
 		self.name = s.path.split(path)[1]
 		self.user_deleted = False
-		
-		
 		self.content = data.get('content')
 		self.shadowID = data.get('id')
 		self.shadowVersion = data.get('version')
@@ -62,12 +61,23 @@ class SyncedDocument(object):
 		return self.serverVersion != -1 and self.shadowVersion == None
 
 class SyncedDocumentController(object):
+	def __init__(self):
+		self.connection = sqlite3.connect('./.syncedDocuments.sqlite')
+		
+		c = self.connection.cursor()
+		c.execute('''create table documents
+		(content TEXT, name TEXT, shadowContent TEXT, shadowID TEXT, shadowName TEXT,
+		userDeleted INTEGER, version INTEGER)''')
+		self.connection.commit()
+		c.close()
+		
 	def sync_document(self, document):
 		pass
 
 	def sync_documents(self):
 		syncing_documents = []
 
+		
 		# 1. Get server documents index, mapped by id
 		server_documents_state_by_id = self.read_server_documents_state()
 
@@ -93,6 +103,12 @@ class SyncedDocumentController(object):
 		return documents_state_by_id
 
 	def read_local_documents(self):
+		c = self.connection.cursor()
+		c.execute('select * from documents')
+		for row in c:
+			print row
+		c.close()
+		
 		locals = {}
 		locals_path = os.getcwd()
 

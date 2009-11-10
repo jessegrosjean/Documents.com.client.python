@@ -9,7 +9,7 @@ import documents_service_support
 """
 	Client script for reading/writing documents hosted by the open source "Documents.com" service:
 	
-		http://github.com/jessegrosjean/documents.com
+		http://github.com/jessegrosjean/Documents.com.client.python
 	
 	Note that WriteRoom.iPhone's document sharing feature works by starting a simplifiled
 	"Documents.com" web server. That means that you can also use this script to automate reading
@@ -104,7 +104,7 @@ class DocumentsService(object):
 			version: Documents version. Must match current version on server for delete to succeed.
 	"""
 	def DELETE_document(self, id, version):
-		return self.server.Send("/v1/documents/%s" % id, body=simplejson.dumps({ 'version' : version }), method="DELETE")
+		return self.server.Send("/v1/documents/%s?version=%i" % (id, version), method="DELETE")
 
 	""" Get document revisions. Note, this only works for python Google App Engine server.
 		The server built into TaskPaper and WriteRoom apps doens't support revisions.
@@ -115,7 +115,7 @@ class DocumentsService(object):
 			Keys for each saved revision of the document.
 	"""
 	def GET_document_revisions(self, document_id):
-		return self.server.Send("/v1/documents/%s/revisions" % document_id)
+		return simplejson.loads(self.server.Send("/v1/documents/%s/revisions" % document_id))
 
 	""" Get document revision. Note, this only works for python Google App Engine server.
 		The server built into WriteRoom.iPhone doens't support revisions.
@@ -127,9 +127,9 @@ class DocumentsService(object):
 			Revisions dictionary with keys id, version, name, content
 	"""
 	def GET_document_revision(self, document_id, revision_id):
-		return self.server.Send("/v1/documents/%s/revisions/%s" % (document_id, revision_id))
+		return simplejson.loads(self.server.Send("/v1/documents/%s/revisions/%s" % (document_id, revision_id)))
 		
-	""" Get document revision. Note, this only works for python Google App Engine server.
+	""" Delete document revision. Note, this only works for python Google App Engine server.
 		The server built into WriteRoom.iPhone doens't support revisions.
 
 		Args:
