@@ -34,8 +34,8 @@ import documents_service_support
 	
 """
 class DocumentsService(object):
-	def __init__(self, service, service_host, user, password):
-		self.server = documents_service_support.HttpRpcServer(service_host, lambda: (user, password), documents_service_support.GetUserAgent(), service, save_cookies=True)
+	def __init__(self, host, user, password, source="ws.simpletext.python.client", account_type=None):
+		self.server = documents_service_support.HttpRpcServer(host, lambda: (user, password), documents_service_support.GetUserAgent(), source, save_cookies=True, account_type=account_type)
 	
 	""" Get index list of server documents.
 
