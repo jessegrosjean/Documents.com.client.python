@@ -108,7 +108,7 @@ class DocumentsService(object):
 			dmp = diff_match_patch.diff_match_patch()
 			server_content = self.GET_document(id)['content']
 			body['patches'] = dmp.patch_toText(dmp.patch_make(server_content, content))	
-		return self.server.Send("/v1/documents/%s" % id, body=simplejson.dumps(body), method="PUT")
+		return simplejson.loads(self.server.Send("/v1/documents/%s" % id, body=simplejson.dumps(body), method="PUT"))
 
 	""" Delete document.
 
