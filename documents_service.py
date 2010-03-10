@@ -17,7 +17,7 @@ import documents_service_support
 	
 	Example:
 	
-		service = DocumentsService("www.simpletext.ws", "jesse@hogbaysoftware.com", "kimchi5pass", "simpletextws")
+		service = DocumentsService("www.simpletext.ws", "google_id", "google_pass", "simpletextws")
 		print service.GET_documents()
 		
 	URL's:
