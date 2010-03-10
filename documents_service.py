@@ -17,7 +17,7 @@ import documents_service_support
 	
 	Example:
 	
-		service = DocumentsService("simpletextws", "www.simpletext.ws", "your_google_account_email", "your_pass")
+		service = DocumentsService("www.simpletext.ws", "jesse@hogbaysoftware.com", "kimchi5pass", "simpletextws")
 		print service.GET_documents()
 		
 	URL's:
@@ -35,7 +35,7 @@ import documents_service_support
 """
 class DocumentsService(object):
 	def __init__(self, host, user, password, source="ws.simpletext.python.client", account_type=None):
-		self.server = documents_service_support.HttpRpcServer(host, lambda: (user, password), documents_service_support.GetUserAgent(), source, save_cookies=True, account_type=account_type)
+		self.server = documents_service_support.HttpRpcServer(host, lambda: (user, password), documents_service_support.GetUserAgent(), source, account_type=account_type, save_cookies=True)
 	
 	""" Get index list of server documents.
 
@@ -53,15 +53,20 @@ class DocumentsService(object):
 		Returns:
 			New document's server state.
 	"""
-	def POST_document(self, name, content):
-		return simplejson.loads(self.server.Send("/v1/documents", body=simplejson.dumps({ "name" : name, "content" : content })))
+	def POST_document(self, name, tags=None, user_ids=None, content=""):
+		body = {}
+		body['name'] = name
+		if tags: body['tags'] = tags
+		if user_ids: body['user_ids'] = user_ids
+		if content: body['content'] = content
+		return simplejson.loads(self.server.Send("/v1/documents", body=simplejson.dumps(body)))
 
 	""" Get server document.
 
 		Args:
 			id: Document's id
 		Returns:
-			Document dictionary with the keys: id, version, name, content
+			Document dictionary with the keys: id, version, name, tags, user_ids, content
 	"""
 	def GET_document(self, id):
 		return simplejson.loads(self.server.Send("/v1/documents/%s" % id))
@@ -78,6 +83,10 @@ class DocumentsService(object):
 			id: Document's id
 			version: Local version of the document.
 			name: New name for document.
+			tags_added: List of tags to add to document.
+			tags_removed: List of tags to remove from document.
+			user_ids_added: List of user_ids to add to document. (document will be shared by all user ids)
+			user_ids_removed: List of user_ids to remove from document.
 			patches: Patches that will be applied to server document's content.
 			content: If no patches are provided you can set the content directly, but this is expensive
 			and will overwrite changes on the server.
@@ -85,10 +94,14 @@ class DocumentsService(object):
 			Document's new state on server after applying your changes.
 			May also include a 'conflicts' key if there were conflicts.
 	"""
-	def PUT_document(self, id, version, name=None, patches=None, content=None):
+	def PUT_document(self, id, version, name=None, tags_added=None, tags_removed=None, user_ids_added=None, user_ids_removed=None, patches=None, content=None):
 		body = {}
 		if version: body['version'] = version
 		if name: body['name'] = name
+		if tags_added: body['tags_added'] = tags_added
+		if tags_removed: body['tags_removed'] = tags_removed
+		if user_ids_added: body['user_ids_added'] = user_ids_added
+		if user_ids_removed: body['user_ids_removed'] = user_ids_removed
 		if patches:
 			body['patches'] = patches
 		elif content:
